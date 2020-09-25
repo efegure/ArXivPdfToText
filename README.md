@@ -12,3 +12,6 @@ After the download you can run the **pdfReader.py** with the same search terms, 
 * Read PDF is only outputted to the console.
 * Not Handling or keeping track of already donwloaded PDF's from DB.
 * Search keywords are written inside the code.
+
+### Note
+Some info about setup can be found in **Setup.txt**.
