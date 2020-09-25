@@ -1,0 +1,111 @@
+# -*- coding: utf-8 -*-
+import urllib.request
+import feedparser
+from pprint import pprint
+from pymongo import MongoClient
+import requests
+import os
+import re
+
+
+client = MongoClient()
+
+# name of our noSql database 'test'
+db = client.test
+# table name in our nosql database 'document'
+document = db.document
+
+# main download directory
+main_directory ='downloads/'
+
+# the query that will be searched in arXiv
+query = 'artificial+intelligence'
+
+# sub directory name
+downloadPath = main_directory+query+'/'
+
+#   the request url that we will make to arXiv's API
+#   search_query = all - we can choose specific fields
+#   start = 0 - we start to get results from 0, if we don't need the first 10 results
+#   (ex. we already requested them) then we can give start value as 10  so we don't request first 10 results again
+#   max_results = 10 - we get 10 of the results from the requested search
+#   for more information : https://arxiv.org/help/api/index
+
+url = 'http://export.arxiv.org/api/query?search_query=all:'+query+'&start=0&max_results=10'
+
+# calling the API
+data = urllib.request.urlopen(url).read()
+
+# We parse the returned result
+d = feedparser.parse(data)
+
+# Print the actual result
+# print( d['feed']['title'] )
+# print( d['entries'] )
+# print( d['feed']['title'] )
+#
+
+# create a sub directory with the query name
+if not os.path.exists(downloadPath):
+    os.makedirs(downloadPath)
+for post in d.entries:
+
+
+
+    # Some examples to print
+    # print(post['title'])
+    # print(post['id'])
+    # print(post['updated'])
+    # print(post['author'])
+    # print(post['arxiv_doi'])
+    # print(post['arxiv_journal_ref'])
+    # print(post['summary'])
+
+
+    # removing invalid characters like '\n' characters since windows cant save those files
+    fileName =  re.sub(r'[\\/:"*?<>|]+', '', '[' + post['author'].replace('\n','') + ']-[' + post['title'].replace('\n','') + ']'+'.pdf')
+    print("Downloading :  ",fileName)
+    try:
+        pdfLink = ''
+        for link in post['links']:
+            if link['type'] == 'application/pdf':
+                # finding the pdf file from links list
+                pdfLink = link['href']
+                break
+        # we request the wanted pdf from the link with 25 seconds of timeout
+        request = requests.get(pdfLink, timeout=25, stream=True)
+        # Stream download the file
+        with open(downloadPath + fileName, 'wb') as fh:
+            # Walk through the request response in chunks of 1024 * 1024 bytes, so 1MiB
+            for chunk in request.iter_content(1024 * 1024):
+                # Write the chunk to the file
+                fh.write(chunk)
+
+        print("DOWNLOAD SUCCESSFUL.")
+    except:
+        # Error occured when downloading or saving the file to the OS
+        print("DOWNLOAD ERROR.")
+
+    try:
+        # after the pdf is downloaded successfully, we create a db entry for the document
+        document_details = {
+            '_id': post['id'],
+            'title': post['title'],
+            'author': post['author'],
+            'lastUpdateDate': post['updated'],
+            'summary': post['summary'],
+            'searchQuery': query,
+        }
+
+        # insert document into db
+        result = document.insert_one(document_details)
+        print('INSERTED TO DB SUCCESSFULLY.\n')
+
+        # Query for the inserted document.
+        # Queryresult = document.find_one({'id': post['id']})
+
+        # pretty print result
+        # pprint(Queryresult)
+    except:
+        # Error occured when connectin or inserting to the db
+        print("DB ERROR.")

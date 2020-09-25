@@ -1,0 +1,25 @@
+Kurulmasi gereken dosya linkleri:
+
+Java 8 : https://www.java.com/tr/download/
+MongoDb Compass:https://www.mongodb.com/download-center/compass?jmp=hero
+Phyton 3
+Phycharm
+
+Projeyi zip dosyasindan çikarip projenin içindeki 'venv' ddosyasini açiyoruz ve burada bulunan 'Scripts' ve 'Lib' dosyalarini 
+masaüstümüzde bir yere kopyaliyoruz(daha sonra kullanilmak üzere).
+
+Daha sonra 'venv' klasörünü siliyoruz ve ana proje dosyasini proje olarak PhyCharmda açiyoruz.
+
+PhyCharm arayüzünde File-> Settings-> Project Interpreter  kismina gelip burada sag üstteki ayarlar tusuna basip add e basiyoruz.
+
+Açilan Pencerede Virtual Environment kismi seçiliyken açik olan ekranda New Environment i seçip Base interpreter olarak Phyton 3 versiyonunu seçip Ok e basiyoruz ve 
+Phycharm projenin klasöründe yeni bir 'venv' klasörü olusturuyor.
+
+Son adim olarak daha sonra kullanmak üzere oldugumuz Scripts ve Lib klasörlerini kopyalayip projenin içinde yeni olusturulan venv klasörünün içine yapistiriyoruz
+ve degisiklikleri kaydet diyoruz.
+
+Gerekli tüm adimlar tamamlandiktan sonra PhyCharmda php dosyalarinda birini çalistirdigimizda sorunsuz çalismasi gerekiyor.
+
+
+
+

@@ -1,0 +1,22 @@
+import os
+from tika import parser
+import pprint
+
+main_directory ='downloads/'
+
+query = 'artificial+intelligence'
+
+downloadPath = main_directory+query+'/'
+
+for filename in os.listdir(downloadPath):
+    # we read every pdf  file in the directory
+    if filename.endswith(".pdf"):
+        try:
+            pdf_contents = parser.from_file(downloadPath + filename)
+            # print contents of the pdf
+            pprint.pprint(pdf_contents)
+        except:
+            print("ERROR WHILE READING THE FILE.")
+        continue
+    else:
+        continue
