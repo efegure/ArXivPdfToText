@@ -11,3 +11,4 @@ After the download you can run the **pdfReader.py** with the same search terms, 
 * Database connection is local.
 * Read PDF is only outputted to the console.
 * Not Handling or keeping track of already donwloaded PDF's from DB.
+* Search keywords are written inside the code.
