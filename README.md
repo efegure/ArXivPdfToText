@@ -1,4 +1,4 @@
-# ArXivPdfToText
+# ArXiv Pdf To Text
 A project that uses **ArXiv** API to download and read PDF files according to the search keywords, and formats them to string for NLP purposes
 
 **ArxivDownloader.py** file lets you do a search from ArXiv's API and downloads the PDF files into the download folder, under a subfolder with the
